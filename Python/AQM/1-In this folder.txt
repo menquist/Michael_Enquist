@@ -1,0 +1,1 @@
+This folder contains learning materials from Applied Quantitative Methods (AQM). The Python scripts contains machine learning use cases and applications from sentimental analysis, topic modelling, and training neural nets. 

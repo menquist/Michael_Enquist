@@ -1,0 +1,1 @@
+I am curious apply GANs on game theory applications. This is a application on Tensorflow Mnist image data

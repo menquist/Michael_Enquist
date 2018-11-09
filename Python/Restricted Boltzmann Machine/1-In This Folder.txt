@@ -1,0 +1,1 @@
+I am curious to applying RBM on time series data, but this application is on Tensorflow Mnist image data. More research is needed on applying RBM

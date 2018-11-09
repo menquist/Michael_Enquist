@@ -1,0 +1,3 @@
+In this folder is a NLP project aligning with city of toronto’s SMART initiative. The application was used at Elevate hackathon.
+
+The Application includes a chatbot and Doc2vec text similarity search grid 
