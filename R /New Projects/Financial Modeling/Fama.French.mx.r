@@ -55,7 +55,7 @@ ticker <- " AD.TO" # <== plug in here
 library(beepr)
 
 # Read in ticker symbols by using the NASDAQ.csv file
-symbols <- read.table("~/R_Stuff/Stock_Analysis/Ticker_Files/NASDAQ.csv", quote="", stringsAsFactors=FALSE)$V1
+symbols <- read.table("~/R_Stuff/Stock_Analysis/Ticker_Files/NASDAQ.csv", quote="", stringsAsFactors=FALSE)$V1[1:10]
 #symbols1 <- read.table("~/R_Stuff/Stock_Analysis/Ticker_Files/NYSE_entire_complist.csv", quote="", stringsAsFactors=FALSE)
 #symbols2 <- read.table("~/R_Stuff/Stock_Analysis/Ticker_Files/TSX.csv", quote="", stringsAsFactors=FALSE)
 #symbols <-   !symbols !== aa 
@@ -161,7 +161,7 @@ stockname <-gsub(".Adjusted", "", stockname)
 test <- sapply(dat1, function(col) ifelse(col>0.01,1,ifelse(col<=0.01,0,col)))
 test <- data.frame(test)
 
-xx 
+ 
 
 for(i in 1:length(stockname)) {
   if(exists("dat")) {
@@ -598,5 +598,5 @@ DATE <- Sys.Date()
 DATE
 match$Date <- DATE
 beep(4)
-write.csv(match, "data_output/FAMA-2018.08.03.csv")
+#write.csv(match, "data_output/FAMA-2018.08.03.csv")
 #write.csv(data.returns, "data_output/data.returns-2018.06.02.csv")
