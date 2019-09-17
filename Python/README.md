@@ -3,7 +3,7 @@
 
 ## About
 
-In folder contains materials that I've learned from Applied Quantitative Methods (AQM), online learning algorithms from Leetcode and Hackerrank. This repository aims to cover everything from linear regression to deep learning and between projects and workshops.
+This folder contains materials that I've learned from Applied Quantitative Methods (AQM), online learning algorithms from Leetcode and Hackerrank. This folder aims to cover everything from linear regression to deep learning and between projects and workshops.
 
 ## Table of Contents
 - [Python implementations of machine learning models and algorithms](#python-implementations-of-machine-learning-models-and-algorithms)
