@@ -24,7 +24,7 @@ If you want to know more about me, please feel free to get in touch by [email](m
     + [Seq2Seq Chatbot and Doc2vec](Python/Seq2Seq_Chatbot_and_Doc2vec/)
     + [Text Summerizer](Python/Text_Summerizer/)
    * [R](R/)
-    + [AQM](R/AQM/)
-    + [Financial Modelling](R/Financial_Modelling/)
-    + [Undergrad Projects](R/Undergrad_Projects/)
+     + [AQM](R/AQM/)
+     + [Financial Modelling](R/Financial_Modelling/)
+     + [Undergrad Projects](R/Undergrad_Projects/)
    
