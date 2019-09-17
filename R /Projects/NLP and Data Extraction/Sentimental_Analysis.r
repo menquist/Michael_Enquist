@@ -1,9 +1,8 @@
 library(RCurl)
-test_data_url <- "https://dl.dropboxusercontent.com/u/8082731/datasets/UMICH-SI650/testdata.txt"
-train_data_url <- "https://dl.dropboxusercontent.com/u/8082731/datasets/UMICH-SI650/training.txt"
-
-test_data_file <- getURL(test_data_url)
-train_data_file <- getURL(train_data_url)
+test_data = ''
+train-data = ''
+test_data_file <- getURL(test_data)
+train_data_file <- getURL(train_data)
 
 train_data_df <- read.csv(
   text = train_data_file, 
