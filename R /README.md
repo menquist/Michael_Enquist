@@ -15,5 +15,5 @@ This folder contains financial modelling, statistical analysis, and machine lear
     	* This is my previous financial research projects while at Simon Fraser University. These projects includes CAPM, FAMA French, Time Series, and portfolio analysis. As well; Oil and Gas industry research by applying Gaussian Mixture models, GLM, and deep learning (CNN) with respect to oil price, commodities, and oil companies. 
     + [Projects](Projects/)
     	*  FAMA French project on NASDAQ , NYSE, and TSX index by creating a table of volatility, betas, and corporate financial ratios with the respect of each company. Data retrieval through Yahoo Finance API (Quantmod package)
-	* NLP project on extracting data from PDF formats, and building semantic analysis.
+		* NLP project on extracting data from PDF formats, and building semantic analysis.
    
