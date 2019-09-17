@@ -2,7 +2,7 @@
 # R: Implementations of Machine Learning Models and Algorithms
 
 ## About
-This folder contains financial modelling, statistical analysis, and machine learning techniques using R programming. During my undergrad, I was fascinated with computational finance and by how statistical methods, algorithms and optimization heuristics provided various types of solutions towards economics and finance. Most of these projects were used in university, and applying towards oil & gas and financial industry
+This folder contains financial modelling, statistical analysis, and machine learning techniques using R programming. During my undergrad, I was fascinated with computational finance and by how statistical methods, algorithms and optimization heuristics provided various types of solutions towards economics and finance. Most of these projects were used in university, and applying towards oil & gas and financial industry.
 
 ## Table of Contents
 - [R implementations of machine learning models and algorithms](#r-implementations-of-machine-learning-models-and-algorithms)
