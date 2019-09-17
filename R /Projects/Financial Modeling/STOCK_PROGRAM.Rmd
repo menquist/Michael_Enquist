@@ -1,0 +1,145 @@
+---
+title: "Stock_Program"
+author: "Michael Enquist"
+date: "June 8, 2015"
+output: pdf_document
+---
+```{r, results='asis', warning=FALSE, echo=FALSE}
+library(foreach)
+library(reshape2)
+library(plyr)
+library(dplyr)
+library(ggplot2)
+library(quantmod)
+options("getSymbols.warning4.0"=FALSE)
+library(knitr)
+library(Quandl)
+```
+
+```{r, results='asis', warning=FALSE, echo=FALSE}
+# Plug year in
+#-----------------------------------------
+year <- "2015-01-06" # <== plug in here
+#-----------------------------------------
+
+# Plug ticker in
+#-----------------------------------------
+ticker <- "AAV.TO" # <== plug in here
+#-----------------------------------------
+
+
+
+Symbols <- read.table("~/Documents/Github/AQM/Mike_Enquist_AQM/Prospects can oil.csv", quote="\"", stringsAsFactors=FALSE)$V1
+
+StockDat <- if(file.exists(ticker) == T) {
+  print("You already have data buddy")} else {
+    
+    foreach(m = 1:length(Symbols), .combine = rbind) %do% {
+      getSymb <- try(getSymbols(
+        Symbols[m], src = "yahoo", from = year, 
+        auto.assign = F)[,6], silent = TRUE)
+      Time <- time(getSymb)
+      Symb.Numeric <- data.frame(Close = as.numeric(getSymb))
+      Rates <- mutate(Symb.Numeric, Close = (Close - lag(Close))/Close)[-1,]
+      
+      return(list(Time, Rates))
+    }
+  }
+
+for(i in 1:length(Symbols)) {
+  Stock_df <- data.frame(date = StockDat[,1][[i]][-1], 
+                         rate = StockDat[,2][[i]])
+  setwd("~/Documents/Github/AQM/Mike_Enquist_AQM/Stock_Directory")
+  write.csv(Stock_df, paste(Symbols[i]))
+}
+
+
+# here is your raw stock data (rate of change)
+stock_of_interest.DATA <- data.frame(read.csv(ticker)[,-1])
+
+# here is your plot (rate of change)
+stock_of_interest.PLOT <- stock_of_interest.DATA %>%
+  melt(variable.name = "ticker", value.name = "rate", id.vars = "date") %>%
+  group_by(date) %>%
+  ggplot(aes(as.Date(date), y = rate)) + geom_line(colour = "blue", aes(y = rate))
+print(stock_of_interest.PLOT)
+
+
+# Volatility (mean should be approx 0) = risk of stock 
+# risk of stock ==> higher expected return. If not, arbitrage!
+kable(data.frame(mean = mean(stock_of_interest.DATA[,2]), 
+                 sd = sd(stock_of_interest.DATA[,2])))
+
+
+
+#############################################################################
+########## Let's get a table of volatility and betas ########################
+#############################################################################
+
+#*********************** Volatility **********************************
+Volatility_Table <- foreach(k = 1:length(list.files()), .combine = rbind) %do% {
+  theSTOCK <- data.frame(read.csv(list.files()[k])[,-1])
+  return(list(mean = mean(theSTOCK[,2], na.rm = T), sd = sd(theSTOCK[,2], na.rm = T)))
+}
+Volatility_Table <- data.frame(ticker = list.files(), mean = ldply(Volatility_Table[,1])[,2], 
+                               sd = ldply(Volatility_Table[,2])[,2])
+Volatility_Table <- filter(Volatility_Table, mean > as.numeric(0) | mean < as.numeric(0))
+Volatility_Table <- as.data.frame(Volatility_Table)
+
+
+#*********************** Betas **********************************
+# get data
+fromDate <- "2015-01-06"
+
+oil.NYSE <- getSymbols("XOI", src = "yahoo", from = fromDate, 
+                       auto.assign = getOption('getSymbols.auto.assign',FALSE))[,6]
+
+# get Index returns
+NYSE.returns <- data.frame(date = as.factor(time(oil.NYSE)), price = as.numeric(oil.NYSE))  %>%
+  mutate(rate.NYSE = (price - lag(price))/lag(price)) %>%
+  filter(date != "2015-01-06") %>%
+  select(-price)
+
+# iterate over each stock in wd
+capm <- foreach(i = 1:length(list.files()), .combine = rbind) %do% {
+  
+  # gather data
+  read_data <- read.csv(Symbols[i])[,-1]
+  read_data$date <- as.factor(read_data$date)
+  
+  # join index and data
+  options(warn=-1) 
+  joined.ret <- inner_join(NYSE.returns, read_data, by = 'date')
+  joined.ret$date <- as.factor(joined.ret$date)
+  
+  # regress returns
+  mod <- lm(rate ~ rate.NYSE, data = joined.ret)
+  intercept <- mod$coef[1]
+  beta <- mod$coef[2]
+  
+  # return int, beta and data
+  return(list(model = mod, int = intercept, beta = beta, 
+              rate = joined.ret[,3], date = joined.ret$date))
+  
+}
+
+# output table of stock stats
+beta.df <- data.frame(ticker = list.files(), beta = ldply(capm[,3])[,2])
+data.table <- as.data.frame(inner_join(Volatility_Table, beta.df, by = 'ticker'))
+```
+
+```{r}
+kable(data.table)
+
+#__________________________________________________________________
+# write table to ALTERNATE working directory
+# write.csv(data.table, "stock_stats.csv")
+#__________________________________________________________________
+
+
+# possible visualisation of sensitivity vs volatility
+beta_vs_sd <- ggplot(data.table, aes(sd, beta)) + 
+  geom_point(aes(colour = ticker)) + 
+  theme_bw()
+print(beta_vs_sd)
+```

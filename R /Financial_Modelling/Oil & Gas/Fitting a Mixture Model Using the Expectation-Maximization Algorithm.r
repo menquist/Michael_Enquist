@@ -1,5 +1,5 @@
 
-#Code is online at http://tinyheero.github.io/2016/01/03/gmm-em.html
+HKSE <- read.csv("HKSE.csv")
 y = HKSE$rate.HKSE
 X = HKSE$`0012.HK.csv`
 n <- length(y)
