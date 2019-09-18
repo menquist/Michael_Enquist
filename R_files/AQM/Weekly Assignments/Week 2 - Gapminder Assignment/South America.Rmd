@@ -1,0 +1,144 @@
+---
+title: "South America"
+author: "Mike"
+date: "March 7, 2015"
+output: 
+  html_document:
+    keep_md: yes
+---
+```{r}
+library(Quandl)
+library(quantmod)
+library(devtools)
+library(ggplot2)
+library(plyr)
+library(dplyr)
+library(knitr)
+```
+
+```{r}
+
+
+mydataoilColumbia = Quandl("NSE/OIL", start_date="2010-01-30", end_date="2015-01-31", collapse="monthly")
+head(mydataoilColumbia)
+str(mydataoilColumbia)
+```
+
+```{r}
+mydatagoldColumbiaandBoliva <- Quandl("BUNDESBANK/BBK01_WT5511", start_date="2010-01-01", end_date="2015-01-01", collapse="monthly")
+head(mydatagoldColumbiaandBoliva)
+str(mydatagoldColumbiaandBoliva)
+
+```
+
+```{r}
+#ODA/PCOALAU_USD
+mydatacoalColumbia <- Quandl("ODA/PCOALAU_USD", start_date="2010-01-30", end_date="2015-01-30", collapse="monthly")
+```
+
+
+```{r}
+mydatazincBoliva <- Quandl("GOOG/OTCMKTS_CZXMF", start_date="2010-01-25", end_date="2015-01-31", collapse="monthly")
+head(mydatazincBoliva)
+str(mydatazincBoliva)
+```
+
+```{r}
+
+Columbiafx <- Quandl("CURRFX/COPUSD", start_date="2010-01-30", end_date="2015-01-31", collapse="monthly")
+head(Columbiafx)
+str(Columbiafx)
+```
+
+```{r}
+Boliviafx <- Quandl("BNP/USDBOB", start_date="2010-02-01", end_date="2015-01-31", collapse="monthly")
+head(Boliviafx)
+str(Boliviafx)
+```
+
+```{r}
+mydatagasBolivia <- Quandl("YAHOO/INDEX_XNG", start_date="2010-01-30", end_date="2015-01-31", collapse="monthly")
+head(mydatagasBolivia)
+str(mydatagasBolivia)
+```
+
+```{r}
+#taking out data
+Columbiacoal <- mydatacoalColumbia[,2]
+FXcolumbia <- Columbiafx[,2]
+FXboliva <- Boliviafx[,2]
+GoldPrice <- mydatagoldColumbiaandBoliva[,2]
+BoliviaGas <- mydatagasBolivia[,2]
+ColumbiaOil <- mydataoilColumbia[,5]
+BoliviaZinc <- mydatazincBoliva[,5]
+```
+
+```{r}
+#columiba coal and FX 
+model <- lm(Columbiacoal ~ FXcolumbia)
+summary(model)
+anova(model)
+plot(residuals(model))
+residuals(model)
+plot(as.numeric(ts(residuals(model))) ~ as.numeric(ts(FXcolumbia)))
+qqnorm(residuals(model), ylab="residuals")
+qqline(residuals(model), col= "red", lwd = 2)
+hist(residuals(model))
+acf(residuals(model))
+predict(model)
+
+```
+
+```{r}
+#columiba oil price and FX 
+model1 <- lm(GoldPrice ~ FXcolumbia)
+summary(model1)
+anova(model1)
+plot(residuals(model1))
+residuals(model1)
+plot(as.numeric(ts(residuals(model1))) ~ as.numeric(ts(FXcolumbia)))
+qqnorm(residuals(model1), ylab="residuals")
+qqline(residuals(model1), col= "red", lwd = 2)
+hist(residuals(model1))
+acf(residuals(model1))
+predict(model1)
+
+```
+
+```{r}
+#columiba Gold price and FX 
+model2 <- lm(ColumbiaOil ~ FXcolumbia)
+summary(model2)
+anova(model2)
+plot(residuals(model2))
+residuals(model2)
+plot(as.numeric(ts(residuals(model2))) ~ as.numeric(ts(FXcolumbia)))
+qqnorm(residuals(model2), ylab="residuals")
+qqline(residuals(model2), col= "red", lwd = 2)
+hist(residuals(model2))
+acf(residuals(model2))
+predict(model2)
+
+```
+
+```{r}
+#Boliva Gold price and FX 
+model3 <- lm(GoldPrice ~ FXboliva)
+summary(model3)
+anova(model3)
+plot(residuals(model3))
+residuals(model3)
+plot(as.numeric(ts(residuals(model3))) ~ as.numeric(ts(FXboliva)))
+qqnorm(residuals(model3), ylab="residuals")
+qqline(residuals(model3), col= "red", lwd = 2)
+hist(residuals(model3))
+acf(residuals(model3))
+predict(model3)
+
+```
+
+
+
+
+
+
