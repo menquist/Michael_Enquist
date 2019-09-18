@@ -1,0 +1,323 @@
+---
+title: "Gapminder_Assignment"
+author: "Michael Enquist"
+date: "11/16/2016"
+output:
+  html_document:
+    keep_md: yes
+  pdf_document: default
+---
+
+```{r}
+#library(devtools)
+#devtools::install_github("jennybc/gapminder")
+```
+
+```{r,echo=FALSE, warning=FALSE, results='hide'}
+library(plyr)
+library(dplyr)
+library(ggplot2)
+library(gapminder)
+
+library(reshape2)
+```
+
+```{r,echo=FALSE, warning=FALSE, results='hide'}
+head(gapminder)
+str(gapminder)
+list(gapminder)
+
+
+
+#Looking at year and population
+dat <- gapminder %>%
+  group_by(year) %>%
+  summarize(mean(pop), sum(pop))
+dat
+
+```
+
+
+
+```{r,echo=FALSE, warning=FALSE, results='hide'}
+# Looking into country, gdp, year greater than 1200 gdpercap
+dat.1 <- gapminder %>%
+  select(country,gdpPercap,year) %>%
+  filter(gdpPercap > 1200) %>%
+  group_by(year)
+
+
+#Looking into each continent and population
+dat.2 <- gapminder %>%
+  select(year, gdpPercap, country)
+dat.2 <- melt(dat.2, id=c("year","gdpPercap", "country"))  
+
+
+
+#Lookign into (continent, year, gdpPercap) over the years
+dat.3 <- gapminder %>%
+  group_by(continent, year, gdpPercap) %>%
+  mutate(change = 100*((gdpPercap - lag(gdpPercap)))/gdpPercap) %>%
+  filter(year > 1952) %>%
+  summarize(mean(pop), sum(pop))
+dat.3
+
+```
+
+
+
+
+
+```{r,echo=FALSE, warning=FALSE, results='hide'}
+# looking at the averages from 1952 respect to gdppercap
+dat.cont <- gapminder %>%
+  select( year, gdpPercap, continent) %>%
+  mutate(change = 100*((gdpPercap - lag(gdpPercap)))/gdpPercap) %>%
+  filter(year > 1952) %>%
+  group_by(year) %>%
+  summarize(change_gdpPercap = mean(change))
+dat.cont  
+
+
+# trying to elimate Oceania from the dataset
+gDat <- gapminder %>%
+  select(continent, year, pop) %>%
+  filter(year == 2007) %>%
+  filter(continent != "Oceania") %>% 
+  group_by(pop) 
+
+#Ploting each Continent, sooo pretty!!!!
+p1 <- ggplot(gDat, aes(log(pop), fill = continent)) + 
+  geom_density(alpha = 0.5) + 
+  facet_wrap(~continent) + 
+  ggtitle("Distribution of Population by Continent")
+print(p1)
+
+
+#selecting year 1992 and 2007, and eliminating out Oceania
+hDat <- gapminder %>%
+  select(continent, year, lifeExp) %>%
+  filter(year %in% seq(1992, 2007, 5)) %>%
+  filter(continent != "Oceania") %>% 
+  group_by(lifeExp)
+
+hDat
+
+```
+
+
+```{r,echo=FALSE, warning=FALSE, results='hide'}
+# Ploting life expectancy over the years
+p2 <- ggplot(hDat, aes(year, lifeExp, colour = continent)) + 
+  geom_jitter() + 
+  ggtitle("Life expectancy of each Continent from 1990 to 2005")
+print(p2)
+
+p2 + stat_smooth(method = "lm", se = FALSE)
+
+
+# Looking into Africa
+iDat <- gapminder %>%
+  select(continent, lifeExp, gdpPercap, year,country) %>%
+  filter(continent == "Africa") %>%
+  group_by(continent, year)
+iDat
+
+pi <- ggplot(iDat, aes(x = year, y = lifeExp, colour = country)) + 
+  geom_jitter(aes(size = gdpPercap)) +
+  theme(legend.position="none") +
+  facet_wrap(~continent) + 
+  ggtitle("Life expectancy by year for African Countries Respect to GDP per Capita")
+print(pi)
+```
+
+
+```{r,echo=FALSE, warning=FALSE, results='hide'}
+# Mutating variables and looking into Rwanda
+jDat <- gapminder %>%
+  filter(country == "Pakistan") %>%
+  mutate(change.pop = 100*((pop - lag(pop)))/pop) %>%
+  mutate(change.lifeExp = 100*((lifeExp - lag(lifeExp)))/lifeExp) %>%
+  mutate(change.gdpPercap = 100*((gdpPercap - lag(gdpPercap)))/gdpPercap) %>%
+  select(country, year, change.pop, change.lifeExp, change.gdpPercap) %>%
+  filter(year > 1952) %>%
+  group_by(year)
+
+LDat <- gapminder %>%
+  filter(country == "Bangladesh") %>%
+  mutate(change.pop = 100*((pop - lag(pop)))/pop) %>%
+  mutate(change.lifeExp = 100*((lifeExp - lag(lifeExp)))/lifeExp) %>%
+  mutate(change.gdpPercap = 100*((gdpPercap - lag(gdpPercap)))/gdpPercap) %>%
+  select(country, year, change.pop, change.lifeExp, change.gdpPercap) %>%
+  filter(year > 1952) %>%
+  group_by(year)
+
+
+
+p3 <- ggplot(jDat, aes(y = change.pop, x = year)) + 
+  geom_line(colour = "magenta") +
+  ggtitle("Population Growth of Rwanda \n ~ 1957 - 2007 ~") +
+  ylab("Population Differential")
+p3
+
+p4 <- ggplot(jDat, aes(y = change.lifeExp, x = year)) +
+  geom_line(colour = "blue") +
+  ggtitle("Life Expectancy Differential of Rwanda \n ~ 1957 - 2007 ~") +
+  ylab("Life Expectancy Differential")
+p4
+
+p5 <- ggplot(jDat, aes(y = change.gdpPercap, x = year)) +
+  geom_line(colour = "orange") +
+  ggtitle("GDP per Capita Growth Rate of Rwanda \n ~ 1957 - 2007 ~") +
+  ylab("GDP Differential")
+p5
+
+
+
+ggplot(jDat, aes(year, y = Percent.Change.Value, color = Legend , group=1)) + 
+  geom_line(aes(y = change.pop, col = "change.pop")) + 
+  geom_line(aes(y = change.lifeExp, col = "change.lifeExp")) +
+  geom_line(aes(y = change.gdpPercap , col = "change.gdpPercap")) +
+  #geom_line(aes(y = ROC.ROIC , col = "ROC.ROIC ")) +
+  scale_shape_manual(values=c(year), guide = guide_legend(nrow=1)) +
+  theme(axis.text.x=element_text(angle=60)) + ggtitle("The Percent Change of Pakistan GDP ,life, and population ") +
+  theme_bw()
+
+```
+
+```{r,echo=FALSE, warning=FALSE, results='hide'}
+#Lastly looking at each country with respect to life expectancy 
+kDat <- gapminder %>%
+  filter(year %in% c(1952, 1982, 2007)) %>%
+  group_by(year)
+kDat
+
+#Plot this out and see any differences between life expectancy over the years.
+#Also using a Lognormal the dataset. stat_smooth(method = "lm", size = 1, colour = "black", se = F)
+ggplot(kDat, aes(y = lifeExp, x = log(gdpPercap), 
+                 colour = as.factor(year))) + 
+  geom_point(alpha = 0.6, size = 4) +
+  stat_smooth(method = "lm", size = 1, colour = "black", se = F) +
+  ggtitle("Life expectancy years 1952, 1982, and 2007")
+```
+
+
+```{r,echo=FALSE, warning=FALSE, results='hide'}
+
+library(reshape2)
+gdp.delta <- gapminder %>%
+  select(year, country, gdpPercap, lifeExp) %>%
+  filter(year > 1952) %>%
+  group_by(country, year, lifeExp) %>%
+  summarise(gdp_median = median(gdpPercap))
+
+gdp.median <- dcast(gdp.delta, country ~ year, value.var="gdp_median")
+#gdp.delta <- data.frame(t(gdp.delta))
+str(gdp.median)
+
+#library(tidyr)
+
+#country <-  gapminder %>% 
+#  select(country, year, gdpPercap,lifeExp) %>% 
+#  spread(year, gdpPercap)
+#country
+#str(country)
+#pairs(country)
+#doing a cross validation on africa (idat)
+```
+
+##Now doing a regression on the year 1992 based on gdppercap. After, we used a cross validation called hold-out. We split the set into a training and one test. The relative sizes of the training and test set is arbitrary. The model is built on the training set, the prediction errors are calculated using the validation set, and the test set is used to assess the generalization error of the final model.
+
+
+
+```{r}
+# Looking into lifeExp and gdpPercap
+
+# Now using a cross validation between lifeExp and gdpPercap
+gdp.median <- gdp.median[-1]
+colnames(gdp.median) <- c("year.1957", "year.1962", "year.1967", "year.1972","year.1977","year.1982","year.1987","year.1992","year.1997","year.2002", "year.2007")
+
+
+gdp.year <- lm(year.1992~., data=gdp.median)
+summary(gdp.year)
+
+
+train <- gdp.median[1:50,]
+test <- gdp.median[51:142,]
+
+Trainx <- train[sample.int(dim(train)[1], size=50), ]
+Testx <- test[sample.int(dim(test)[1], size=92), ]
+dim(Trainx)      
+dim(Testx)
+
+x.train <- sample_n(train,50)
+x.test <- sample_n(test, 92)
+dim(x.train)
+dim(x.test)
+
+#Running a regression for train
+A <- lm( year.1992~., data=Trainx)
+summary(A)
+
+#Running the regression for test
+B <- lm(year.1992 ~ ., data=Testx)
+summary(B)
+
+```
+
+
+
+```{r}
+
+
+
+
+plot(fitted(A), residuals(A), xlab="Fitted", ylab= "residuals")
+abline(h= c(-2,0,2), lwd = c(2,2,2), col=c("red","red", "red"), lty= c(2,1,2) )
+plot(fitted(A), residuals(A), xlab= "Fitted", main="|residuals|")
+abline(h= c(-2,0,2), lwd = c(2,2,2), col=c("red","red", "red"), lty= c(2,1,2) )     
+     
+     summary(lm((residuals(A) ~ fitted(A))))
+             
+             qqnorm(residuals(A), ylab="residuals")
+             qqline(residuals(A), col= "red", lwd = 2)  
+             hist(residuals(A))
+             
+             Z <- lm(year.1992 ~ ., data=Trainx)
+             summary(Z)
+             
+             plot(residuals(Z))
+              abline(h= c(-2,0,2), lwd = c(2,2,2), col=c("red","red", "red"), lty= c(2,1,2) )
+            
+             
+             plot(fitted(Z), residuals(Z), xlab="Fitted", ylab= "residuals")
+             abline(h= c(-2,0,2), lwd = c(2,2,2), col=c("red","red", "red"), lty= c(2,1,2) )
+             plot(fitted(Z), residuals(Z), xlab= "Fitted", main="|residuals|")
+             abline(h= c(-2,0,2), lwd = c(2,2,2), col=c("red","red", "red"), lty= c(2,1,2) )
+                  summary(lm((residuals(Z) ~ fitted(Z))))
+                          qqnorm(residuals(Z), ylab="residuals")
+                          qqline(residuals(Z), col= "red", lwd = 2)  
+                          hist(residuals(Z))
+                          
+                          
+                          pred <- predict(Z, newdata = x.test)
+                          obs <- x.test$year.1992
+                          plot(obs ~ pred)
+                          abline(c(0,1), col="red", lwd = 2)
+                          RVSE <- sqrt(mean(pred - obs)^2)
+                          AE <- sum(abs(pred - obs))
+                          acf(pred)
+#Autocorrelation function (ACF). At lag k, this is the correlation between series values that are k intervals apart.
+                          
+
+
+                          pacf(pred)
+#Partial autocorrelation function (PACF). At lag k, this is the correlation between    series values that are k intervals apart, accounting for the values of the intervals between.
+                          
+#A positive correlation indicates that large current values correspond with large values at the specified lag; a negative correlation indicates that large current values correspond with small values at the specified lag.
+                          
+#The absolute value of a correlation is a measure of the strength of the association, with larger absolute values indicating stronger relationships.
+
+
+                          summary(pred)
+```
