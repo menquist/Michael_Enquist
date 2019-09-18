@@ -1,0 +1,235 @@
+---
+title: "Natural Gas companies"
+author: "Mike"
+date: "November 8, 2014"
+output: html_document
+---
+
+I'm looking at oil and drilling companies stock prices during the time when i was working in the oil & gas industry in Alberta. I added oil & natural gas prices from the past 10 years, and the US/Canadian Exchange rate as well. 
+
+```{r,results='asis'}
+# load dependencies
+suppressPackageStartupMessages(library(quantmod))
+library(knitr)
+
+# Import data
+options("getSymbols.warning4.0"=FALSE)
+getSymbols("PTEN", src = "yahoo", from = "2000-01-01")
+Patterson <- PTEN
+
+# Check data structure
+kable(head(Patterson))
+
+# Plot data
+lineChart(Patterson, theme = "black")
+
+# load dependencies
+library(quantmod)
+
+# Import data
+getSymbols("PD.TO", src = "yahoo", from = "2000-01-01")
+Precison_Drilling <- PD.TO
+
+# Check data structure
+kable(head(Precison_Drilling))
+
+# Plot data
+lineChart(Precison_Drilling, theme = "black")
+
+# load dependencies
+library(quantmod)
+
+# Import data
+getSymbols("TOU.TO", src = "yahoo", from = "2000-01-01")
+Tourmaline <- TOU.TO
+
+# Check data structure
+Tourmaline.tail <- tail(Tourmaline, n = 3650)
+
+# Plot data
+lineChart(Tourmaline, theme = "black")
+
+# load dependencies
+library(quantmod)
+
+# Import data
+getSymbols("CNQ.TO", src = "yahoo", from = "2000-01-01")
+CNR <- CNQ.TO
+
+# Check data structure
+kable(head(CNR))
+
+
+# Plot data
+chartSeries(CNR, theme = "white", type = "line")
+
+# load dependencies
+library(quantmod)
+
+# Import data
+getSymbols("ECA.TO", src = "yahoo")
+Encana <- ECA.TO
+
+# Check data structure
+kable(head(Encana))
+Encana.tail <- tail(Encana, n = 3650)
+
+# Plot data
+lineChart(Encana, theme = "black")
+
+# load dependencies
+library(quantmod)
+
+# Import data
+getSymbols("BP", src = "yahoo")
+BP <- BP
+
+# Check data structure
+kable(head(BP))
+BP.tail <- tail(BP, n = 3650)
+
+# Plot data
+lineChart(BP, theme = "black")
+
+# load dependencies
+library(quantmod)
+
+# Import data
+getSymbols("XOM", src = "yahoo")
+Exxon <- XOM
+
+# Check data structure
+kable(head(Exxon))
+Exxon.tail <- tail(Exxon, n = 3650)
+
+# Plot data
+lineChart(Exxon, theme = "black")
+
+# load dependencies
+library(quantmod)
+
+# Import data
+getSymbols("ECA.TO", src = "yahoo")
+Encana <- ECA.TO
+
+# Check data structure
+kable(head(Encana))
+Encana.tail <- tail(Encana, n = 3650)
+
+# Plot data
+lineChart(Encana, theme = "black")
+
+# load dependencies
+library(quantmod)
+
+# Import data
+Shell <- getSymbols("RDS-A", src = "yahoo", auto.assign = FALSE)
+
+
+# Check data structure
+kable(head(Shell))
+Shell.tail <- tail(Shell, n = 3650)
+
+# Plot data
+lineChart(Shell, theme = "black")
+
+# load dependencies
+library(quantmod)
+
+# Import data
+getSymbols("NBR", src = "yahoo")
+Nabors <- NBR
+
+# Check data structure
+kable(head(Nabors))
+Nabors.tail <- tail(Nabors, n = 3650)
+
+# Plot data
+lineChart(Nabors.tail, theme = "black")
+
+# load dependencies
+library(quantmod)
+
+# Import data
+getSymbols("HAL", src = "yahoo")
+Halliburton <- HAL
+
+# Check data structure
+kable(head(Halliburton))
+Halliburton.tail <- tail(Halliburton, n = 3650)
+
+# Plot data
+lineChart(Halliburton, theme = "black")
+
+# load dependencies
+library(quantmod)
+
+# Import data
+getSymbols("SLB", src = "yahoo")
+Schlumberger <- SLB
+
+# Check data structure
+kable(head(Schlumberger))
+Schlumberger.tail <- tail(Schlumberger, n = 3650)
+
+# Plot data
+lineChart(Schlumberger, theme = "black")
+
+# load dependencies
+library(quantmod)
+
+# Import data
+getSymbols("PSI.TO", src = "yahoo")
+Pason <- PSI.TO
+
+# Check data structure
+kable(head(Pason))
+PSI.TO.tail <- tail(Pason, n = 3650)
+
+# Plot data
+lineChart(Pason, theme = "black")
+
+# load dependencies
+library(quantmod)
+
+ # Import data
+getSymbols("DCOILWTICO",src="FRED")
+Oil_Prices <- DCOILWTICO
+
+# Check data structure
+kable(head(Oil_Prices))
+DCOILWTICO.tail <- tail(Oil_Prices, n = 3900)
+
+# Plot data
+lineChart(DCOILWTICO.tail, theme = "black")
+
+# load dependencies
+library(quantmod)
+
+ # Import data
+getSymbols("GASPRICE",src="FRED")
+NaturalGas <- GASPRICE
+
+# Check data structure
+kable(head(NaturalGas))
+GASPRICE.tail <- tail(NaturalGas, n = 175)
+
+# Plot data
+lineChart(GASPRICE.tail, theme = "black")
+
+# load dependencies
+library(quantmod)
+
+ # Import data
+getSymbols("EXCAUS",src="FRED")
+CDNUS_RATE <- EXCAUS
+
+# Check data structure
+kable(head(CDNUS_RATE))
+EXCAUS.tail <- tail(CDNUS_RATE, n = 190)
+
+# Plot data
+lineChart(EXCAUS.tail, theme = "black")
+
+```
+

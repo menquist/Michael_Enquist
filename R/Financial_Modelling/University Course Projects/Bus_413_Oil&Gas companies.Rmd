@@ -1,0 +1,294 @@
+---
+title: "Oil&Gas Companies which impact the Canadian economy"
+author: "Mike"
+date: "November 8, 2014"
+output:
+  html_document:
+    keep_md: yes
+  pdf_document: default
+---
+
+I'm analyzing the major oil&drilling companies which impacts the Canadian Oil&Gas industry. I only included the companies that i felt impacts Alberta and northern BC, yet i know i can find more companies on yahoo.  The time period is around early 2000's to present. I worked in the Oil&Gas industry around early 2006 till 2010. Also, I included oil & natural gas prices from the past 10 years, and the US/Canadian Exchange rate as well. 
+```{r}
+library(knitr)
+suppressPackageStartupMessages(library(quantmod))
+```
+
+```{r,results='asis'}
+# Import data Patterson-Uti
+year = "1900-01-01"
+options("getSymbols.warning4.0"=FALSE)
+Henderson.Land.Development <-getSymbols("0012.HK", src = "yahoo", from = "2000-01-01")
+Henderson.Land.Development <- "0012.HK"
+#Patterson-Uti is a land drilling company. They are a major player in US, they are small in Canada but they have enough capital to compete with Nabors and Precision Drilling.  
+# Check data structure
+kable(head(Henderson.Land.Development), format = "markdown")
+
+# Plot data
+lineChart(Henderson.Land.Development, theme = "white")
+
+getSymbols("HSE.TO", src = "yahoo", from = "2014-01-02")
+Husky <- HSE.TO
+lineChart(Husky, theme = "white")
+
+
+# load dependencies
+library(quantmod)
+
+# Import data
+HAL <- getSymbols("0012.HK", src = "yahoo", from = "2008-01-01", to = "2009-11-28", auto.assign = FALSE)[,6]
+Precison_Drilling <- HAL
+str(Precison_Drilling)
+# Check data structure
+kable(head(Precison_Drilling), format = "markdown")
+ggplot(Precison_Drilling, aes(y = '0012.HK.Adjusted', x = date)) + geom_point(size = 3, colour = "blue") + theme_bw()
+
+Henderson.Land.Development <- as.data.frame(Precison_Drilling)
+str(Henderson.Land.Development)
+# Plot data
+lineChart(HAL, theme = "white")
+
+# load dependencies
+library(quantmod)
+
+# Import data
+getSymbols("TOU.TO", src = "yahoo", from = "2000-01-01")
+Tourmaline <- TOU.TO
+
+# Check data structure
+Tourmaline.tail <- tail(Tourmaline, n = 3650)
+
+# Plot data
+lineChart(Tourmaline, theme = "white")
+
+# load dependencies
+library(quantmod)
+
+# Import data Canadian National Resources
+getSymbols("CNQ.TO", src = "yahoo", from = "2000-01-01")
+CNR <- CNQ.TO
+
+# Check data structure
+kable(head(CNR), format = "markdown")
+
+
+# Plot data
+chartSeries(CNR, theme = "white", type = "line")
+
+# load dependencies
+library(quantmod)
+
+# Import data
+getSymbols("ECA.TO", src = "yahoo", from = "2000-01-01")
+Encana <- ECA.TO
+
+# Check data structure
+kable(head(Encana), format = "markdown")
+Encana.tail <- tail(Encana, n = 3650)
+
+# Plot data
+lineChart(Encana, theme = "white")
+
+# load dependencies
+library(quantmod)
+
+# Import data
+getSymbols("BP", src = "yahoo", from = "2000-01-01")
+BP <- BP
+
+# Check data structure
+kable(head(BP), format = "markdown")
+BP.tail <- tail(BP, n = 3650)
+
+# Plot data
+lineChart(BP, theme = "white")
+
+# load dependencies
+library(quantmod)
+
+# Import data
+getSymbols("XOM", src = "yahoo")
+Exxon <- XOM
+
+# Check data structure
+kable(head(Exxon), format = "markdown")
+Exxon.tail <- tail(Exxon, n = 3650)
+
+# Plot data
+lineChart(Exxon, theme = "white")
+
+# load dependencies
+library(quantmod)
+
+# Import data
+getSymbols("ECA.TO", src = "yahoo", from = "2000-01-01")
+Encana <- ECA.TO
+
+# Check data structure
+kable(head(Encana), format = "markdown")
+Encana.tail <- tail(Encana, n = 3650)
+
+# Plot data
+lineChart(Encana, theme = "white")
+
+# load dependencies
+library(quantmod)
+
+# Import data
+Shell <- getSymbols("RDS-A", src = "yahoo",from = "2000-01-01", auto.assign = FALSE)
+
+
+# Check data structure
+kable(head(Shell), format = "markdown")
+
+# Plot data
+lineChart(Shell, theme = "white")
+
+# load dependencies
+library(quantmod)
+
+# Import data
+getSymbols("NBR", src = "yahoo", from = "2000-01-01")
+Nabors <- NBR
+
+# Check data structure
+kable(head(Nabors), format = "markdown")
+
+# Plot data
+lineChart(Nabors, theme = "white")
+
+# load dependencies
+library(quantmod)
+
+# Import data
+getSymbols("HAL", src = "yahoo", from = "2000-01-01")
+Halliburton <- HAL
+
+# Check data structure
+kable(head(Halliburton), format = "markdown")
+
+# Plot data
+lineChart(Halliburton, theme = "white")
+
+# load dependencies
+library(quantmod)
+
+# Import data
+getSymbols("SLB", src = "yahoo", from = "2000-01-01")
+Schlumberger <- SLB
+
+# Check data structure
+kable(head(Schlumberger), format = "markdown")
+
+# Plot data
+lineChart(Schlumberger, theme = "white")
+
+# load dependencies
+library(quantmod)
+
+# Import data
+getSymbols("PSI.TO", src = "yahoo", from = "2000-01-01")
+Pason <- PSI.TO
+
+# Check data structure
+kable(head(Pason), format = "markdown")
+
+# Plot data
+lineChart(Pason, theme = "white")
+
+# load dependencies
+library(quantmod)
+
+# Import data 
+getSymbols("SU", src = "yahoo", from = "2000-01-01")
+Suncor <- SU
+
+# Check data structure
+kable(head(Suncor), format = "markdown")
+
+# Plot data
+chartSeries(Suncor, theme = "white", type = "line")
+
+# load dependencies
+library(quantmod)
+
+# Import data 
+getSymbols("CPG", src = "yahoo", from = "2000-01-01")
+Crescent <- CPG
+
+# Check data structure
+kable(head(Crescent), format = "markdown")
+
+# Plot data
+chartSeries(Crescent, theme = "white", type = "line")
+
+# load dependencies
+library(quantmod)
+
+# Import data 
+getSymbols("COS.TO", src = "yahoo", from = "2000-01-01")
+CANOILSANDS <- COS.TO
+
+# Check data structure
+kable(head(CANOILSANDS), format = "markdown")
+
+# Plot data
+chartSeries(CANOILSANDS, theme = "white", type = "line")
+
+# load dependencies
+library(quantmod)
+
+# Import data 
+getSymbols("CVE", src = "yahoo", from = "2000-01-01")
+Cenovus <- CVE
+
+# Check data structure
+kable(head(Cenovus), format = "markdown")
+
+# Plot data
+chartSeries(Cenovus, theme = "white", type = "line")
+
+# load dependencies
+library(quantmod)
+
+ # Import data
+getSymbols("DCOILWTICO",src="FRED")
+Oil_Prices <- DCOILWTICO
+# Crude Oil Prices
+# Check data structure
+kable(head(Oil_Prices), format = "markdown")
+DCOILWTICO.tail <- tail(Oil_Prices)
+
+# Plot data
+lineChart(Oil_Prices, theme = "white")
+
+# load dependencies
+library(quantmod)
+
+ # Import data
+getSymbols("GASPRICE",src="FRED")
+NaturalGas <- GASPRICE
+# Natural Gas prices till August 10 2013, I need to find a recent updated database, however it is still useful...
+# Check data structure
+kable(head(NaturalGas), format = "markdown")
+GASPRICE.tail <- tail(NaturalGas, n = 175)
+
+# Plot data
+lineChart(GASPRICE.tail, theme = "white")
+
+# load dependencies
+library(quantmod)
+
+ # Import data
+getSymbols("EXCAUS",src="FRED")
+CDNUS_RATE <- EXCAUS
+# The Canaidan/US exchange rate
+# Check data structure
+kable(head(CDNUS_RATE), format = "markdown")
+EXCAUS.tail <- tail(CDNUS_RATE, n = 190)
+
+# Plot data
+lineChart(EXCAUS.tail, theme = "white")
+
+```
+
