@@ -1,1 +1,0 @@
-This folder contains financial modelling, statistical analysis, and machine learning techniques using R programming. Most of these projects were used in university projects, and applying to oil & gas and financial industry
