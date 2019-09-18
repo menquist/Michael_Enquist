@@ -12,7 +12,7 @@ The data is made up and it is not applicable on any actual company. I'm interest
   * [About](#about)
   * [Table of Contents](#table-of-contents)
   * [Examples](#examples)
-    + [Linear Discriminant Analysis](⁨1_Linear_Discriminant_Analysis/Linear_Discriminant_Analysis.py)
+    + [Linear Discriminant Analysis](⁨Linear_Discriminant_Analysis/Linear_Discriminant_Analysis.py)
     + [Logistic Regression](2_Logistic-Regression/Logistic-Reg-Scratch.py)
     + [LASSO](3_Lasso/Lasso.py)
     + [Ridge Regression](4_Ridge-Regression/Ridge-Regression.py)
